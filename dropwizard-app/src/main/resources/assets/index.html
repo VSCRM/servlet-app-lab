@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Управління користувачами</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; line-height: 1.6; }
+        .form-group { margin-bottom: 10px; }
+        label { display: inline-block; width: 100px; }
+        button { margin-right: 5px; cursor: pointer; padding: 5px 10px; }
+        pre { background: #f4f4f4; padding: 10px; border: 1px solid #ddd; min-height: 50px; }
+    </style>
+</head>
+<body>
+<h1>User Management Console (LR4)</h1>
+
+<div class="form-group">
+    <label>ID:</label>
+    <input type="number" id="userId" placeholder="ID">
+</div>
+<div class="form-group">
+    <label>Ім'я:</label>
+    <input type="text" id="userName" placeholder="Ім'я">
+</div>
+<div class="form-group">
+    <label>Email:</label>
+    <input type="email" id="userEmail" placeholder="Email">
+</div>
+<div class="form-group">
+    <label>Пароль:</label>
+    <input type="password" id="userPassword" placeholder="Пароль">
+</div>
+
+<div style="margin-top: 20px;">
+    <button onclick="getAllUsers()">Показати всіх</button>
+    <button onclick="findUser()">Знайти за ID</button>
+    <button onclick="addUser()">Додати (POST)</button>
+    <button onclick="deleteUser()" style="color: red;">Видалити</button>
+</div>
+
+<h3>Результат запиту:</h3>
+<pre id="output"></pre>
+
+<script>
+    const output = document.getElementById('output');
+
+    async function getAllUsers() {
+        const res = await fetch('/api/users');
+        const data = await res.json();
+        output.innerText = JSON.stringify(data, null, 2);
+    }
+
+    async function findUser() {
+        const id = document.getElementById('userId').value;
+        if (!id) return alert("Введіть ID");
+        const res = await fetch('/api/users/' + id);
+        if (res.status === 404) {
+            output.innerText = "Користувача не знайдено";
+        } else {
+            const data = await res.json();
+            output.innerText = JSON.stringify(data, null, 2);
+        }
+    }
+
+    async function addUser() {
+        const user = {
+            name: document.getElementById('userName').value,
+            email: document.getElementById('userEmail').value,
+            password: document.getElementById('userPassword').value
+        };
+        const res = await fetch('/api/users', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(user)
+        });
+        if (res.ok) {
+            getAllUsers();
+        } else {
+            const err = await res.json();
+            output.innerText = JSON.stringify(err, null, 2);
+        }
+    }
+
+    async function deleteUser() {
+        const id = document.getElementById('userId').value;
+        if (!id) return alert("Введіть ID");
+        await fetch('/api/users/' + id, { method: 'DELETE' });
+        getAllUsers();
+    }
+</script>
+</body>
+</html>

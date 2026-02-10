@@ -1,0 +1,9 @@
+target/
+.idea/
+*.iml
+*.doc
+*.docx
+~*$*.doc*
+*.pdf
+*.deb
+*.tmp
