@@ -4,9 +4,10 @@
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
          version="6.0">
 
-  <display-name>Servlet App Lab 2</display-name>
+  <display-name>Servlet App Lab 3</display-name>
 
   <resource-ref>
+    <description>DB Connection Pool</description>
     <res-ref-name>jdbc/MyDB</res-ref-name>
     <res-type>javax.sql.DataSource</res-type>
     <res-auth>Container</res-auth>

@@ -1,0 +1,7 @@
+*.pdf
+*.deb
+*.tmp
+target/
+.idea/
+.smarttomcat/
+*.class

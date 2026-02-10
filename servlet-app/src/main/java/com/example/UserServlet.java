@@ -1,130 +1,129 @@
 package com.example;
 
+import com.example.dao.UserDAO;
+import com.example.model.User;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.sql.*;
+import java.sql.SQLException;
+import java.util.List;
 
 @WebServlet("/user/*")
 public class UserServlet extends HttpServlet {
+    private UserDAO userDAO;
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String format = request.getParameter("format");
-        String pathInfo = request.getPathInfo();
-        String userName = (pathInfo != null && pathInfo.length() > 1)
-                ? pathInfo.substring(1) : "Guest";
-
-        HttpSession session = request.getSession();
-        String savedSessionUser = (String) session.getAttribute("userName");
-        if (savedSessionUser == null) {
-            session.setAttribute("userName", userName);
-            savedSessionUser = userName;
-        }
-
-        String lastVisit = "Перший візит";
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie c : cookies) {
-                if ("lastVisit".equals(c.getName())) {
-                    lastVisit = URLDecoder.decode(c.getValue(), StandardCharsets.UTF_8);
-                }
-            }
-        }
-
-        Cookie visitCookie = new Cookie("lastVisit", URLEncoder.encode("2026-02-09_14:00", StandardCharsets.UTF_8));
-        visitCookie.setMaxAge(60 * 60 * 24);
-        response.addCookie(visitCookie);
-
-        if ("json".equalsIgnoreCase(format)) {
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            PrintWriter out = response.getWriter();
-            out.print("{\"status\": \"success\", \"user\": \"" + savedSessionUser + "\", \"lastVisit\": \"" + lastVisit + "\"}");
-            out.flush();
-        } else {
-            response.setContentType("text/html;charset=UTF-8");
-            PrintWriter out = response.getWriter();
-            out.println("<html><body>");
-            out.println("<h1>Робота з сесіями та куками</h1>");
-            out.println("<p>Поточний користувач (з PathVariable): <b>" + userName + "</b></p>");
-            out.println("<p>Збережений у сесії: <b>" + savedSessionUser + "</b></p>");
-            out.println("<p>Ваш останній візит (з Cookies): <b>" + lastVisit + "</b></p>");
-
-            out.println("<hr>");
-            out.println("<h2>Дані з бази даних MySQL (JDBC):</h2>");
-
-            String url = "jdbc:mysql://localhost:3306/mydb";
-            String dbUser = "root";
-            String dbPass = "admin1";
-
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                try (Connection conn = DriverManager.getConnection(url, dbUser, dbPass)) {
-                    Statement stmt = conn.createStatement();
-                    ResultSet rs = stmt.executeQuery("SELECT * FROM users");
-
-                    out.println("<table border='1'><tr><th>ID</th><th>Username</th><th>Password</th></tr>");
-                    while (rs.next()) {
-                        out.println("<tr>");
-                        out.println("<td>" + rs.getInt("id") + "</td>");
-                        out.println("<td>" + rs.getString("username") + "</td>");
-                        out.println("<td>" + rs.getString("password") + "</td>");
-                        out.println("</tr>");
-                    }
-                    out.println("</table>");
-                }
-            } catch (Exception e) {
-                out.println("<p style='color:red;'>Помилка JDBC: " + e.getMessage() + "</p>");
-            }
-
-            out.println("<hr>");
-            out.println("<h2>Додати користувача в БД:</h2>");
-            out.println("<form method='POST' action='" + request.getContextPath() + "/user/'>");
-            out.println("Логін: <input type='text' name='new_user' required><br>");
-            out.println("Пароль: <input type='password' name='new_pass' required><br>");
-            out.println("<input type='submit' value='Додати в MySQL'>");
-            out.println("</form>");
-
-            out.println("<hr>");
-            out.println("<p>Щоб змінити ім'я в сесії, введіть його в URL: <code>/user/НовеІм'я</code></p>");
-            out.println("</body></html>");
+    public void init() throws ServletException {
+        try {
+            InitialContext ctx = new InitialContext();
+            DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/MyDB");
+            userDAO = new UserDAO(ds);
+        } catch (NamingException e) {
+            throw new ServletException("DataSource not found", e);
         }
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String newUser = request.getParameter("new_user");
-        String newPass = request.getParameter("new_pass");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        String pathInfo = request.getPathInfo();
 
-        if (newUser != null && newPass != null) {
-            String url = "jdbc:mysql://localhost:3306/mydb";
-            String dbUser = "root";
-            String dbPass = "admin1";
+        out.println("<html><body><h1>Управління користувачами (Lab 3)</h1>");
 
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                try (Connection conn = DriverManager.getConnection(url, dbUser, dbPass)) {
-                    String sql = "INSERT INTO users (username, password) VALUES (?, ?)";
-                    PreparedStatement pstmt = conn.prepareStatement(sql);
-                    pstmt.setString(1, newUser);
-                    pstmt.setString(2, newPass);
-                    pstmt.executeUpdate();
+        out.println("<form method='GET' action='" + request.getContextPath() + "/user/search'>");
+        out.println("Пошук за ID: <input type='number' name='id' required>");
+        out.println("<input type='submit' value='Знайти'>");
+        out.println("</form><hr>");
+
+        try {
+            if (pathInfo != null && pathInfo.equals("/search")) {
+                int id = Integer.parseInt(request.getParameter("id"));
+                User user = userDAO.getUserById(id);
+                if (user != null) {
+                    out.println("<h3>Знайдено: ID " + user.getId() + " | " + user.getName() + " | " + user.getEmail() + "</h3>");
+                } else {
+                    out.println("<p style='color:red;'>Користувача з ID " + id + " не знайдено</p>");
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+                out.println("<a href='" + request.getContextPath() + "/user/'>Назад до списку</a>");
+            } else if (pathInfo != null && pathInfo.equals("/delete")) {
+                int id = Integer.parseInt(request.getParameter("id"));
+                userDAO.deleteUser(id);
+                response.sendRedirect(request.getContextPath() + "/user/");
+                return;
+            } else if (pathInfo != null && pathInfo.equals("/edit")) {
+                int id = Integer.parseInt(request.getParameter("id"));
+                User user = userDAO.getUserById(id);
+                out.println("<h2>Редагування (Транзакція)</h2>");
+                out.println("<form method='POST' action='" + request.getContextPath() + "/user/update'>");
+                out.println("<input type='hidden' name='id' value='" + user.getId() + "'>");
+                out.println("Ім'я: <input type='text' name='username' value='" + user.getName() + "'><br>");
+                out.println("Email: <input type='email' name='email' value='" + user.getEmail() + "'><br>");
+                out.println("<input type='submit' value='Оновити'>");
+                out.println("</form>");
+            } else {
+                List<User> users = userDAO.getAllUsers();
+                out.println("<table border='1'><tr><th>ID</th><th>Username</th><th>Email</th><th>Дії</th></tr>");
+                for (User u : users) {
+                    out.println("<tr>");
+                    out.println("<td>" + u.getId() + "</td>");
+                    out.println("<td>" + u.getName() + "</td>");
+                    out.println("<td>" + u.getEmail() + "</td>");
+                    out.println("<td>");
+                    out.println("<a href='" + request.getContextPath() + "/user/edit?id=" + u.getId() + "'>Редагувати</a> | ");
+                    out.println("<a href='" + request.getContextPath() + "/user/delete?id=" + u.getId() + "' onclick='return confirm(\"Видалити?\")'>Видалити</a>");
+                    out.println("</td>");
+                    out.println("</tr>");
+                }
+                out.println("</table>");
             }
+        } catch (Exception e) {
+            out.println("<p style='color:red;'>Помилка: " + e.getMessage() + "</p>");
         }
 
-        String nameFromForm = request.getParameter("name");
-        if (nameFromForm != null) {
-            request.getSession().setAttribute("userName", nameFromForm);
+        if (pathInfo == null || (!pathInfo.equals("/edit") && !pathInfo.equals("/search"))) {
+            out.println("<hr><h2>Додати нового:</h2>");
+            out.println("<form method='POST' action='" + request.getContextPath() + "/user/add'>");
+            out.println("Логін: <input type='text' name='new_user' required><br>");
+            out.println("Email: <input type='email' name='new_email' required><br>");
+            out.println("Пароль: <input type='password' name='new_pass' required><br>");
+            out.println("<input type='submit' value='Додати'>");
+            out.println("</form>");
         }
 
+        out.println("</body></html>");
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String pathInfo = request.getPathInfo();
+
+        try {
+            if (pathInfo != null && pathInfo.equals("/add")) {
+                String name = request.getParameter("new_user");
+                String email = request.getParameter("new_email");
+                String pass = request.getParameter("new_pass");
+                if (name != null && email != null) {
+                    userDAO.createUser(new User(name, email, pass));
+                }
+            } else if (pathInfo != null && pathInfo.equals("/update")) {
+                int id = Integer.parseInt(request.getParameter("id"));
+                String name = request.getParameter("username");
+                String email = request.getParameter("email");
+                User user = new User();
+                user.setId(id);
+                user.setName(name);
+                user.setEmail(email);
+                userDAO.updateUserWithTransaction(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         response.sendRedirect(request.getContextPath() + "/user/");
     }
 }
