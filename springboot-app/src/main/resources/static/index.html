@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>User Manager CRUD</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; background-color: #f8f9fa; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        input { display: block; width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { padding: 10px 15px; cursor: pointer; border: none; border-radius: 4px; color: white; transition: 0.3s; }
+        .btn-add { background: #28a745; }
+        .btn-update { background: #ffc107; color: black; }
+        .btn-search { background: #007bff; width: 100%; }
+        .btn-delete { background: #dc3545; padding: 5px 10px; }
+        .btn-select { background: #6c757d; padding: 5px 10px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #dee2e6; padding: 12px; text-align: left; }
+        th { background-color: #e9ecef; }
+        tr:hover { background-color: #f1f1f1; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Управління користувачами (Spring Boot CRUD)</h2>
+
+    <div>
+        <input type="text" id="name" placeholder="Ім'я (username)">
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Пароль">
+        <button class="btn-add" onclick="addUser()">Додати нового</button>
+        <button class="btn-update" onclick="updateUser()">Зберегти зміни</button>
+    </div>
+
+    <hr style="margin: 25px 0;">
+
+    <div style="display: flex; gap: 10px;">
+        <input type="number" id="searchId" placeholder="ID користувача" style="flex: 2;">
+        <button class="btn-search" style="flex: 1;" onclick="searchUser()">Пошук</button>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Дії</th>
+        </tr>
+        </thead>
+        <tbody id="userList"></tbody>
+    </table>
+</div>
+
+<script>
+    const url = '/api/users';
+    let currentEditId = null;
+
+    async function loadUsers() {
+        const res = await fetch(url);
+        const users = await res.json();
+        const tbody = document.getElementById('userList');
+        tbody.innerHTML = '';
+        users.forEach(u => {
+            tbody.innerHTML += `<tr>
+                <td>${u.id}</td>
+                <td>${u.name}</td>
+                <td>${u.email}</td>
+                <td>
+                    <button class="btn-select" onclick="editUser(${u.id},'${u.name}','${u.email}')">Редагувати</button>
+                    <button class="btn-delete" onclick="deleteUser(${u.id})">Видалити</button>
+                </td>
+            </tr>`;
+        });
+    }
+
+    async function addUser() {
+        const user = {
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value
+        };
+        await fetch(url, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(user)
+        });
+        clearForm();
+        loadUsers();
+    }
+
+    async function deleteUser(id) {
+        if(confirm('Ви впевнені, що хочете видалити користувача #' + id + '?')) {
+            await fetch(`${url}/${id}`, { method: 'DELETE' });
+            loadUsers();
+        }
+    }
+
+    async function searchUser() {
+        const id = document.getElementById('searchId').value;
+        const res = await fetch(`${url}/${id}`);
+        if(res.ok) {
+            const u = await res.json();
+            alert(`Результат пошуку:\nID: ${u.id}\nUsername: ${u.name}\nEmail: ${u.email}`);
+        } else {
+            alert('Користувача з ID ' + id + ' не знайдено');
+        }
+    }
+
+    function editUser(id, name, email) {
+        currentEditId = id;
+        document.getElementById('name').value = name;
+        document.getElementById('email').value = email;
+        window.scrollTo(0,0);
+    }
+
+    async function updateUser() {
+        if(!currentEditId) return alert('Виберіть користувача кнопкою "Редагувати"');
+        const user = {
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value
+        };
+        await fetch(`${url}/${currentEditId}`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(user)
+        });
+        currentEditId = null;
+        clearForm();
+        loadUsers();
+    }
+
+    function clearForm() {
+        document.getElementById('name').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('password').value = '';
+    }
+
+    loadUsers();
+</script>
+</body>
+</html>
