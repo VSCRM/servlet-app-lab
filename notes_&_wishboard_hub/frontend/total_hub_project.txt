@@ -1,0 +1,1043 @@
+===== FILE: ./css/style.css =====
+:root {
+    --bg:       #0f1117;
+    --surface:  #1a1d27;
+    --card:     #20243a;
+    --border:   #2e3350;
+    --primary:  #6c63ff;
+    --success:  #22c55e;
+    --danger:   #ef4444;
+    --info:     #38bdf8;
+    --text:     #e2e8f0;
+    --muted:    #64748b;
+    --heading:  #f8fafc;
+    --radius:   10px;
+    --shadow:   0 4px 20px rgba(0,0,0,.4);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+a { color: var(--primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code { font-family: monospace; color: var(--primary); font-size: .85em; }
+
+/* ── Nav ─────────────────────────────────────────────────────────────── */
+.nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.nav__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    gap: 1rem;
+}
+
+.nav__logo { font-weight: 700; font-size: 1.05rem; color: var(--heading); }
+
+.nav__links { display: flex; gap: 1.5rem; list-style: none; }
+.nav__links a { color: var(--muted); font-size: .9rem; }
+.nav__links a:hover, .nav__links a.active { color: var(--primary); text-decoration: none; }
+
+#greeting { font-size: .85rem; color: var(--muted); }
+.greeting--in { color: var(--success); }
+
+/* ── Layout ──────────────────────────────────────────────────────────── */
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1.5rem 1.25rem 3rem;
+}
+
+.page-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--heading);
+    margin-bottom: 1.5rem;
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+@media (max-width: 750px) { .grid-2 { grid-template-columns: 1fr; } }
+
+/* ── Card ────────────────────────────────────────────────────────────── */
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    box-shadow: var(--shadow);
+}
+
+.card__title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--heading);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.card__title small { font-size: .72rem; color: var(--muted); font-weight: 400; }
+
+/* ── Stats row ───────────────────────────────────────────────────────── */
+.stats {
+    display: flex;
+    gap: .75rem;
+    margin-bottom: 1rem;
+}
+
+.stat {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: .65rem;
+    text-align: center;
+}
+
+.stat__val  { display: block; font-size: 1.4rem; font-weight: 800; color: var(--primary); }
+.stat__lbl  { font-size: .7rem; color: var(--muted); }
+
+/* ── Form ────────────────────────────────────────────────────────────── */
+.form { display: flex; flex-direction: column; gap: .75rem; }
+
+.form label { font-size: .78rem; font-weight: 600; color: var(--muted); display: block; margin-bottom: .25rem; }
+
+.form input,
+.form textarea,
+.form select {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    padding: .55rem .8rem;
+    font-family: inherit;
+    font-size: .9rem;
+}
+
+.form input:focus,
+.form textarea:focus,
+.form select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(108,99,255,.2);
+}
+
+.form textarea { resize: vertical; min-height: 80px; }
+
+/* ── Buttons ─────────────────────────────────────────────────────────── */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    padding: .5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: .875rem;
+    font-weight: 600;
+    transition: opacity .15s;
+    text-decoration: none;
+}
+.btn:hover { opacity: .85; text-decoration: none; }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+
+.btn-primary { background: var(--primary); color: #fff; width: 100%; justify-content: center; }
+.btn-success { background: var(--success); color: #fff; }
+.btn-danger  { background: rgba(239,68,68,.15); color: var(--danger); border: 1px solid var(--danger); }
+.btn-ghost   { background: transparent; color: var(--muted); border: 1px solid var(--border); width: 100%; justify-content: center; }
+.btn-sm      { padding: .25rem .6rem; font-size: .78rem; }
+
+/* ── Note cards ──────────────────────────────────────────────────────── */
+.note-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--primary);
+    border-radius: var(--radius);
+    padding: .85rem 1rem;
+    margin-bottom: .6rem;
+}
+
+.note-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: .5rem;
+    margin-bottom: .4rem;
+}
+
+.note-card__body { font-size: .85rem; color: var(--muted); white-space: pre-wrap; }
+
+/* ── Wish cards ──────────────────────────────────────────────────────── */
+.wish-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: .85rem 1rem;
+    margin-bottom: .6rem;
+    display: flex;
+    align-items: flex-start;
+    gap: .75rem;
+}
+
+.wish-card--done { opacity: .55; }
+.wish-card--done strong { text-decoration: line-through; }
+
+.wish-card__body { flex: 1; }
+.wish-card__body p { font-size: .82rem; color: var(--muted); margin-top: .2rem; }
+.wish-card__actions { display: flex; gap: .4rem; flex-shrink: 0; }
+
+.badge-done { font-size: .75rem; color: var(--success); padding: .2rem .5rem; }
+
+/* ── Add form (collapsible) ──────────────────────────────────────────── */
+details { margin-bottom: 1rem; }
+summary {
+    cursor: pointer;
+    font-size: .88rem;
+    font-weight: 600;
+    color: var(--primary);
+    list-style: none;
+    padding: .4rem 0;
+}
+summary::-webkit-details-marker { display: none; }
+details[open] summary { margin-bottom: .75rem; }
+
+/* ── Login page ──────────────────────────────────────────────────────── */
+.login-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 56px);
+    padding: 2rem 1rem;
+}
+
+.login-box {
+    width: 100%;
+    max-width: 400px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+}
+
+.login-box h1 { font-size: 1.3rem; color: var(--heading); text-align: center; margin-bottom: 1.5rem; }
+
+.field-error { font-size: .8rem; color: var(--danger); margin-top: .25rem; min-height: 1.1rem; }
+
+.info-note {
+    font-size: .78rem;
+    color: var(--muted);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: .6rem .8rem;
+    margin-top: .85rem;
+    line-height: 1.5;
+}
+
+/* ── Profile page ────────────────────────────────────────────────────── */
+.profile-wrap {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 0 1.25rem;
+}
+
+.info-table { width: 100%; border-collapse: collapse; }
+.info-table td {
+    padding: .55rem .7rem;
+    border-bottom: 1px solid var(--border);
+    font-size: .875rem;
+    vertical-align: top;
+}
+.info-table td:first-child { color: var(--muted); width: 40%; }
+
+.access-denied { text-align: center; padding: 2rem 1rem; }
+.access-denied__icon { font-size: 2.5rem; margin-bottom: .75rem; }
+.access-denied p { color: var(--muted); margin-bottom: 1rem; }
+
+/* ── Helpers ─────────────────────────────────────────────────────────── */
+.loading, .empty, .error { padding: 1.5rem; text-align: center; color: var(--muted); font-size: .875rem; }
+.error { color: var(--danger); }
+.mt { margin-top: .75rem; }
+.divider { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
+
+/* ── Toast ───────────────────────────────────────────────────────────── */
+#toast {
+    position: fixed;
+    bottom: 1.25rem;
+    right: 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: .65rem 1.1rem;
+    font-size: .875rem;
+    box-shadow: var(--shadow);
+    z-index: 999;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity .2s, transform .2s;
+    pointer-events: none;
+}
+#toast.toast--show  { opacity: 1; transform: translateY(0); }
+#toast.toast--success { border-color: var(--success); color: var(--success); }
+#toast.toast--error   { border-color: var(--danger);  color: var(--danger); }
+#toast.toast--info    { border-color: var(--info);    color: var(--info); }
+-e 
+
+===== FILE: ./index.html =====
+<!doctype html>
+<html lang="uk">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Dashboard — Hub</title>
+		<link rel="stylesheet" href="css/style.css" />
+	</head>
+	<body>
+		<nav class="nav">
+			<div class="nav__inner">
+				<span class="nav__logo">📋 Notes & Wishboard Hub</span>
+				<ul class="nav__links">
+					<li><a href="index.html" class="active">Dashboard</a></li>
+					<li><a href="login.html">Вхід</a></li>
+					<li><a href="profile.html">Профіль</a></li>
+				</ul>
+				<span id="greeting">Гість</span>
+			</div>
+		</nav>
+
+		<div class="container">
+			<h1 class="page-title">Dashboard</h1>
+
+			<div class="grid-2">
+				<section class="card">
+					<div class="card__title">
+						📝 Нотатки
+						<small>Spring Boot · 9001</small>
+					</div>
+
+					<details>
+						<summary>+ Нова нотатка</summary>
+						<form id="note-form" class="form">
+							<div>
+								<label for="note-title">Заголовок</label>
+								<input
+									type="text"
+									id="note-title"
+									placeholder="Назва нотатки…"
+									required />
+							</div>
+							<div>
+								<label for="note-content">Зміст</label>
+								<textarea
+									id="note-content"
+									placeholder="Текст…"
+									required></textarea>
+							</div>
+							<button type="submit" class="btn btn-primary">Зберегти</button>
+						</form>
+					</details>
+
+					<div id="notes-list"></div>
+				</section>
+
+				<section class="card">
+					<div class="card__title">
+						⭐ Побажання
+						<small>Dropwizard · 9002</small>
+					</div>
+
+					<div class="stats">
+						<div class="stat">
+							<span class="stat__val" id="stat-total">—</span>
+							<span class="stat__lbl">Всього</span>
+						</div>
+						<div class="stat">
+							<span class="stat__val" id="stat-achieved">—</span>
+							<span class="stat__lbl">Виконано</span>
+						</div>
+						<div class="stat">
+							<span class="stat__val" id="stat-pending">—</span>
+							<span class="stat__lbl">Очікує</span>
+						</div>
+					</div>
+
+					<details>
+						<summary>+ Нове бажання</summary>
+						<form id="wish-form" class="form">
+							<div>
+								<label for="wish-name">Назва</label>
+								<input
+									type="text"
+									id="wish-name"
+									placeholder="Що хочете?"
+									required />
+							</div>
+							<div>
+								<label for="wish-desc">Опис (необов'язково)</label>
+								<textarea
+									id="wish-desc"
+									placeholder="Деталі…"
+									style="min-height: 60px"></textarea>
+							</div>
+							<button type="submit" class="btn btn-primary">Додати</button>
+						</form>
+					</details>
+
+					<div id="wishes-list"></div>
+				</section>
+			</div>
+		</div>
+
+		<script type="module">
+			import {initNotes} from "./js/notes.js";
+			import {initWishes} from "./js/wishes.js";
+			import {showGreeting} from "./js/greeting.js";
+
+			showGreeting();
+			initNotes();
+			initWishes();
+		</script>
+	</body>
+</html>
+-e 
+
+===== FILE: ./js/api.js =====
+const HOST = "localhost";
+
+const SPRING = `http://${HOST}:9001/api`;
+const DW = `http://${HOST}:9002/api`;
+const SERVLET = `http://${HOST}:9000/servlet-legacy`;
+
+const clearLocalCookie = () => {
+	document.cookie = "user_session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+};
+
+async function get(url) {
+	const r = await fetch(url, { credentials: 'include' });
+
+	if (r.status === 401) {
+		clearLocalCookie();
+		return { loggedIn: false, username: "Гість" };
+	}
+
+	if (!r.ok) {
+		const text = await r.text();
+		throw new Error(`[${r.status}] ${text}`);
+	}
+	return r.json();
+}
+
+async function post(url, body) {
+	const r = await fetch(url, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		credentials: 'include',
+		body: JSON.stringify(body),
+	});
+	if (!r.ok) {
+		const text = await r.text();
+		throw new Error(`[${r.status}] ${text}`);
+	}
+	return r.json();
+}
+
+async function postForm(url, params) {
+	const r = await fetch(url, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+		credentials: 'include',
+		body: new URLSearchParams(params).toString(),
+	});
+
+	const text = await r.text();
+	const json = text ? JSON.parse(text) : {};
+
+	if (!r.ok) {
+		throw new Error(json.error || `[${r.status}] Помилка сервера`);
+	}
+	return json;
+}
+
+async function del(url) {
+	const r = await fetch(url, { method: 'DELETE', credentials: 'include' });
+	if (!r.ok) {
+		const text = await r.text();
+		throw new Error(`[${r.status}] ${text}`);
+	}
+}
+
+async function put(url, body) {
+	const r = await fetch(url, {
+		method: 'PUT',
+		headers: { 'Content-Type': 'application/json' },
+		credentials: 'include',
+		body: body ? JSON.stringify(body) : undefined,
+	});
+	if (!r.ok) {
+		const text = await r.text();
+		throw new Error(`[${r.status}] ${text}`);
+	}
+	const text = await r.text();
+	return text ? JSON.parse(text) : null;
+}
+
+export const api = {
+	notes: {
+		getAll: (userId) => get(`${SPRING}/notes?userId=${userId}`),
+		create: (note) => post(`${SPRING}/notes`, note),
+		update: (id, n) => put(`${SPRING}/notes/${id}`, n),
+		remove: (id) => del(`${SPRING}/notes/${id}`),
+	},
+	users: {
+		getAll: () => get(`${SPRING}/users`),
+		create: (user) => post(`${SPRING}/users`, user),
+		remove: (id) => del(`${SPRING}/users/${id}`),
+	},
+	wishes: {
+		getAll: (userId) => get(`${DW}/wishes?userId=${userId}`),
+		getStats: (userId) => get(`${DW}/wishes/stats?userId=${userId}`),
+		create: (wish) => post(`${DW}/wishes`, wish),
+		achieve: (id) => put(`${DW}/wishes/${id}/achieve`),
+		remove: (id) => del(`${DW}/wishes/${id}`),
+	},
+	session: {
+		login: (u, p) => postForm(`${SERVLET}/login`, { username: u, password: p }),
+		profile: () => get(`${SERVLET}/profile`),
+		get: () => get(`${SERVLET}/profile`),
+		logoutUser: async () => {
+			try {
+				await postForm(`${SERVLET}/logout`, {});
+			} catch (e) {
+				console.warn(e);
+			} finally {
+				clearLocalCookie();
+				localStorage.clear();
+				window.location.replace("login.html");
+			}
+		}
+	},
+};
+-e 
+
+===== FILE: ./js/greeting.js =====
+import { api } from './api.js';
+
+export async function showGreeting() {
+	const el = document.getElementById('greeting');
+	if (!el) return;
+
+	try {
+		const data = await api.session.get();
+		if (data && data.loggedIn) {
+			el.textContent = `Вітаємо, ${data.username}! 👋`;
+			el.classList.add('greeting--in');
+		} else {
+			el.textContent = 'Гість';
+			el.classList.remove('greeting--in');
+		}
+	} catch (err) {
+		el.textContent = 'Гість';
+	}
+}
+-e 
+
+===== FILE: ./js/login.js =====
+import { api } from './api.js';
+import { toast } from './toast.js';
+import { showGreeting } from './greeting.js';
+
+export function initLogin() {
+	showGreeting();
+	checkSession();
+
+	document.getElementById('login-form')?.addEventListener('submit', async e => {
+		e.preventDefault();
+		const username = document.getElementById('username').value.trim();
+		const password = document.getElementById('password').value;
+		const errEl = document.getElementById('login-error');
+		errEl.textContent = '';
+
+		if (username.length < 3) {
+			errEl.textContent = 'Мінімум 3 символи';
+			return;
+		}
+		if (password.length < 4) {
+			errEl.textContent = 'Мінімум 4 символи пароля';
+			return;
+		}
+
+		const btn = e.submitter;
+		btn.disabled = true;
+		btn.textContent = 'Вхід…';
+
+		try {
+			const res = await api.session.login(username, password);
+			if (res.ok) {
+				toast(`Вітаємо, ${res.username}! Перенаправлення…`, 'success');
+				await showGreeting();
+				setTimeout(() => {
+					window.location.href = 'index.html';
+				}, 500);
+			} else {
+				errEl.textContent = res.error || 'Помилка входу';
+			}
+		} catch (err) {
+			errEl.textContent = err.message;
+			toast('Помилка: ' + err.message, 'error');
+		} finally {
+			btn.disabled = false;
+			btn.textContent = 'Увійти';
+		}
+	});
+
+	document.getElementById('logout-btn')?.addEventListener('click', async () => {
+		try {
+			await api.session.logout();
+		} catch { }
+		toast('Ви вийшли', 'info');
+		setTimeout(() => location.reload(), 500);
+	});
+}
+
+async function checkSession() {
+	try {
+		const data = await api.session.get();
+		if (data && data.loggedIn) {
+			document.getElementById('login-form').style.display = 'none';
+			const loggedInBlock = document.getElementById('logged-in-block');
+			if (loggedInBlock) {
+				loggedInBlock.style.display = 'block';
+			}
+			const currentUserObj = document.getElementById('current-user');
+			if (currentUserObj) {
+				currentUserObj.textContent = data.username;
+			}
+		}
+	} catch { }
+}
+-e 
+
+===== FILE: ./js/notes.js =====
+import { api } from './api.js';
+import { toast } from './toast.js';
+
+let currentUserId = null;
+
+export async function initNotes() {
+	try {
+		const user = await api.session.profile();
+		if (user.loggedIn && user.userId) {
+			currentUserId = user.userId;
+			await loadNotes();
+		}
+	} catch (err) {
+		console.error(err);
+	}
+
+	document.getElementById('note-form')?.addEventListener('submit', async e => {
+		e.preventDefault();
+		const title = document.getElementById('note-title').value.trim();
+		const content = document.getElementById('note-content').value.trim();
+
+		if (!title || !content || !currentUserId) {
+			toast('Заповніть поля', 'error');
+			return;
+		}
+
+		const btn = e.submitter;
+		btn.disabled = true;
+		btn.textContent = 'Збереження…';
+
+		try {
+			await api.notes.create({ title, content, userId: currentUserId });
+			e.target.reset();
+			const detailsTag = e.target.closest('details');
+			if (detailsTag) detailsTag.removeAttribute('open');
+			toast('Збережено ✓', 'success');
+			await loadNotes();
+		} catch (err) {
+			toast('Помилка: ' + err.message, 'error');
+		} finally {
+			btn.disabled = false;
+			btn.textContent = 'Зберегти';
+		}
+	});
+
+	document.getElementById('notes-list')?.addEventListener('click', async e => {
+		const btn = e.target.closest('[data-action]');
+		if (!btn) return;
+		const id = Number(btn.dataset.id);
+
+		if (btn.dataset.action === 'delete-note') {
+			if (!confirm('Видалити нотатку?')) return;
+			btn.disabled = true;
+			try {
+				await api.notes.remove(id);
+				toast('Видалено', 'info');
+				await loadNotes();
+			} catch (err) {
+				toast('Помилка: ' + err.message, 'error');
+				btn.disabled = false;
+			}
+		}
+	});
+}
+
+async function loadNotes() {
+	const list = document.getElementById('notes-list');
+	if (!list || !currentUserId) return;
+
+	list.innerHTML = '<p class="loading">Завантаження…</p>';
+	try {
+		const notes = await api.notes.getAll(currentUserId);
+		if (!notes.length) {
+			list.innerHTML = '<p class="empty">Нотаток немає</p>';
+			return;
+		}
+		list.innerHTML = notes.map(n => `
+            <div class="note-card">
+                <div class="note-card__header">
+                    <strong>${esc(n.title)}</strong>
+                    <button data-action="delete-note" data-id="${n.id}" class="btn btn-danger btn-sm">✕</button>
+                </div>
+                <p class="note-card__body">${esc(n.content)}</p>
+            </div>
+        `).join('');
+	} catch (err) {
+		list.innerHTML = `<p class="error">Помилка завантаження<br><small>${err.message}</small></p>`;
+	}
+}
+
+function esc(s) {
+	return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+-e 
+
+===== FILE: ./js/profile.js =====
+import { api } from './api.js';
+import { showGreeting } from './greeting.js';
+
+export async function initProfile() {
+	showGreeting();
+
+	const box = document.getElementById('profile-data');
+
+	const cookie = document.cookie.split(';').find(c => c.trim().startsWith('user_session='));
+	if (!cookie) {
+		box.innerHTML = `
+            <div class="access-denied">
+                <div class="access-denied__icon">🔒</div>
+                <p>Cookie <code>user_session</code> відсутній.</p>
+                <a href="login.html" class="btn btn-primary">Увійти</a>
+            </div>`;
+		return;
+	}
+
+	try {
+		const d = await api.session.profile();
+		box.innerHTML = `
+            <table class="info-table">
+                <tr><td>Користувач</td><td><code>${d.username}</code></td></tr>
+                <tr><td>Session ID</td><td><code>${d.sessionId}</code></td></tr>
+                <tr><td>Час сервера</td><td><code>${d.serverTime}</code></td></tr>
+                <tr><td>IP-адреса</td><td><code>${d.remoteAddr}</code></td></tr>
+                <tr><td>User-Agent</td><td><code>${d.userAgent}</code></td></tr>
+            </table>`;
+	} catch (err) {
+		box.innerHTML = `<p class="error">Помилка: ${err.message}<br>
+            <small>Переконайтесь що Tomcat запущено та servlet-legacy.war задеплоєно на порту 9000.</small></p>`;
+	}
+}
+-e 
+
+===== FILE: ./js/toast.js =====
+export function toast(msg, type = 'info') {
+	let el = document.getElementById('toast');
+	if (!el) {
+		el = document.createElement('div');
+		el.id = 'toast';
+		document.body.appendChild(el);
+	}
+	el.textContent = msg;
+	el.className = `toast toast--${type} toast--show`;
+	clearTimeout(el._t);
+	el._t = setTimeout(() => el.classList.remove('toast--show'), 3000);
+}
+-e 
+
+===== FILE: ./js/wishes.js =====
+import { api } from './api.js';
+import { toast } from './toast.js';
+
+let currentUserId = null;
+
+export async function initWishes() {
+	try {
+		const user = await api.session.profile();
+		if (user.loggedIn && user.userId) {
+			currentUserId = user.userId;
+			await loadWishes();
+			await loadStats();
+		}
+	} catch (err) {
+		console.error(err);
+	}
+
+	document.getElementById('wish-form')?.addEventListener('submit', async e => {
+		e.preventDefault();
+		const name = document.getElementById('wish-name').value.trim();
+		const desc = document.getElementById('wish-desc').value.trim();
+
+		if (!name || !currentUserId) {
+			toast('Введіть назву', 'error');
+			return;
+		}
+
+		const btn = e.submitter;
+		btn.disabled = true;
+		btn.textContent = 'Додавання…';
+
+		try {
+			await api.wishes.create({ name, description: desc, userId: currentUserId });
+			e.target.reset();
+			const detailsTag = e.target.closest('details');
+			if (detailsTag) detailsTag.removeAttribute('open');
+
+			toast('Бажання додано ✓', 'success');
+			await loadWishes();
+			await loadStats();
+		} catch (err) {
+			toast('Помилка: ' + err.message, 'error');
+		} finally {
+			btn.disabled = false;
+			btn.textContent = 'Додати';
+		}
+	});
+
+	document.getElementById('wishes-list')?.addEventListener('click', async e => {
+		const btn = e.target.closest('[data-action]');
+		if (!btn) return;
+		const id = Number(btn.dataset.id);
+
+		if (btn.dataset.action === 'achieve') {
+			btn.disabled = true;
+			try {
+				await api.wishes.achieve(id);
+				toast('Виконано! 🎉', 'success');
+				await loadWishes();
+				await loadStats();
+			} catch (err) {
+				toast('Помилка: ' + err.message, 'error');
+				btn.disabled = false;
+			}
+		}
+
+		if (btn.dataset.action === 'delete-wish') {
+			if (!confirm('Видалити бажання?')) return;
+			btn.disabled = true;
+			try {
+				await api.wishes.remove(id);
+				toast('Видалено', 'info');
+				await loadWishes();
+				await loadStats();
+			} catch (err) {
+				toast('Помилка: ' + err.message, 'error');
+				btn.disabled = false;
+			}
+		}
+	});
+}
+
+async function loadWishes() {
+	const list = document.getElementById('wishes-list');
+	if (!list || !currentUserId) return;
+
+	list.innerHTML = '<p class="loading">Завантаження…</p>';
+	try {
+		const wishes = await api.wishes.getAll(currentUserId);
+		if (!wishes.length) {
+			list.innerHTML = '<p class="empty">Бажань немає</p>';
+			return;
+		}
+		list.innerHTML = wishes.map(w => `
+            <div class="wish-card ${w.achieved ? 'wish-card--done' : ''}">
+                <div class="wish-card__body">
+                    <strong>${esc(w.name)}</strong>
+                    ${w.description ? `<p>${esc(w.description)}</p>` : ''}
+                </div>
+                <div class="wish-card__actions">
+                    ${!w.achieved
+				? `<button data-action="achieve" data-id="${w.id}" class="btn btn-success btn-sm">✓</button>`
+				: '<span class="badge-done">Виконано</span>'}
+                    <button data-action="delete-wish" data-id="${w.id}" class="btn btn-danger btn-sm">✕</button>
+                </div>
+            </div>
+        `).join('');
+	} catch (err) {
+		list.innerHTML = `<p class="error">Помилка завантаження<br><small>${err.message}</small></p>`;
+	}
+}
+
+async function loadStats() {
+	try {
+		const s = await api.wishes.getStats();
+		const elTotal = document.getElementById('stat-total');
+		const elAchieved = document.getElementById('stat-achieved');
+		const elPending = document.getElementById('stat-pending');
+
+		if (elTotal) elTotal.textContent = s.total ?? 0;
+		if (elAchieved) elAchieved.textContent = s.achieved ?? 0;
+		if (elPending) elPending.textContent = s.pending ?? 0;
+	} catch (err) {
+		console.error(err);
+	}
+}
+
+function esc(s) {
+	return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+-e 
+
+===== FILE: ./login.html =====
+<!doctype html>
+<html lang="uk">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Вхід — Hub</title>
+		<link rel="stylesheet" href="css/style.css" />
+	</head>
+	<body>
+		<nav class="nav">
+			<div class="nav__inner">
+				<span class="nav__logo">📋 Notes & Wishboard Hub</span>
+				<ul class="nav__links">
+					<li><a href="index.html">Dashboard</a></li>
+					<li><a href="login.html" class="active">Вхід</a></li>
+					<li><a href="profile.html">Профіль</a></li>
+				</ul>
+				<span id="greeting">Гість</span>
+			</div>
+		</nav>
+
+		<div class="login-wrap">
+			<div class="login-box">
+				<h1>🔐 Вхід до системи</h1>
+
+				<form id="login-form" class="form" novalidate>
+					<div>
+						<label for="username">Ім'я користувача</label>
+						<input type="text" id="username" placeholder="username" required />
+					</div>
+					<div>
+						<label for="password">Пароль</label>
+						<input
+							type="password"
+							id="password"
+							placeholder="••••••"
+							required />
+					</div>
+					<div id="login-error" class="field-error"></div>
+					<button type="submit" class="btn btn-primary">Увійти</button>
+				</form>
+
+				<div id="logged-in-block" style="display: none">
+					<hr class="divider" />
+					<p style="text-align: center; color: var(--muted); font-size: 0.9rem">
+						Ви увійшли як: <strong id="current-user"></strong>
+					</p>
+					<button id="logout-btn" class="btn btn-ghost mt">Вийти</button>
+					<a href="profile.html" class="btn btn-ghost mt"
+						>🔧 Технічний профіль</a
+					>
+				</div>
+
+				<div class="info-note">
+					🍪 При вході через Java Servlet встановлюється cookie
+					<code>user_session</code>. Фронтенд читає його через
+					<code>document.cookie</code>. Сторінка профілю захищена
+					<code>CookieFilter</code>.
+				</div>
+			</div>
+		</div>
+
+		<script type="module">
+			import {initLogin} from "./js/login.js";
+			initLogin();
+		</script>
+	</body>
+</html>
+-e 
+
+===== FILE: ./profile.html =====
+<!doctype html>
+<html lang="uk">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Технічний профіль — Hub</title>
+		<link rel="stylesheet" href="css/style.css" />
+	</head>
+	<body>
+		<nav class="nav">
+			<div class="nav__inner">
+				<span class="nav__logo">📋 Notes & Wishboard Hub</span>
+				<ul class="nav__links">
+					<li><a href="index.html">Dashboard</a></li>
+					<li><a href="login.html">Вхід</a></li>
+					<li><a href="profile.html" class="active">Профіль</a></li>
+				</ul>
+				<span id="greeting">Гість</span>
+			</div>
+		</nav>
+
+		<div class="profile-wrap">
+			<div class="card">
+				<div class="card__title">🔧 Технічний профіль</div>
+				<div id="profile-data">
+					<p class="loading">Завантаження…</p>
+				</div>
+			</div>
+
+			<div class="info-note" style="margin-top: 1rem">
+				Ця сторінка захищена <code>CookieFilter</code> (Java Servlet Filter).
+				Сервлет повертає <code>401</code> якщо cookie
+				<code>user_session</code> відсутній. Фронтенд перевіряє cookie через
+				<code>document.cookie</code> перед запитом.
+			</div>
+		</div>
+
+		<script type="module">
+			import {initProfile} from "./js/profile.js";
+			initProfile();
+		</script>
+	</body>
+</html>
+-e 
+

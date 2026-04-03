@@ -1,0 +1,5 @@
+{
+	"liveServer.settings.root": "/",
+	"liveServer.settings.CustomBrowserShortcut": "chrome",
+	"liveServer.settings.AdvanceCustomBrowserCmdLine": "http://localhost:5500/index.html"
+}

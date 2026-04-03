@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="uk">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Технічний профіль — Hub</title>
+		<link rel="stylesheet" href="css/style.css" />
+	</head>
+	<body>
+		<nav class="nav">
+			<div class="nav__inner">
+				<span class="nav__logo">📋 Notes & Wishboard Hub</span>
+				<ul class="nav__links">
+					<li><a href="index.html">Dashboard</a></li>
+					<li><a href="login.html">Вхід</a></li>
+					<li><a href="profile.html" class="active">Профіль</a></li>
+				</ul>
+				<span id="greeting">Гість</span>
+			</div>
+		</nav>
+
+		<div class="profile-wrap">
+			<div class="card">
+				<div class="card__title">🔧 Технічний профіль</div>
+				<div id="profile-data">
+					<p class="loading">Завантаження…</p>
+				</div>
+			</div>
+
+			<div class="info-note" style="margin-top: 1rem">
+				Ця сторінка захищена <code>CookieFilter</code> (Java Servlet Filter).
+				Сервлет повертає <code>401</code> якщо cookie
+				<code>user_session</code> відсутній. Фронтенд перевіряє cookie через
+				<code>document.cookie</code> перед запитом.
+			</div>
+		</div>
+
+		<script type="module">
+			import {initProfile} from "./js/profile.js";
+			initProfile();
+		</script>
+	</body>
+</html>

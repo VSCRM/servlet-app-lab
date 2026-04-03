@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="uk">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Вхід — Hub</title>
+		<link rel="stylesheet" href="css/style.css" />
+	</head>
+	<body>
+		<nav class="nav">
+			<div class="nav__inner">
+				<span class="nav__logo">📋 Notes & Wishboard Hub</span>
+				<ul class="nav__links">
+					<li><a href="index.html">Dashboard</a></li>
+					<li><a href="login.html" class="active">Вхід</a></li>
+					<li><a href="profile.html">Профіль</a></li>
+				</ul>
+				<span id="greeting">Гість</span>
+			</div>
+		</nav>
+
+		<div class="login-wrap">
+			<div class="login-box">
+				<h1>🔐 Вхід до системи</h1>
+
+				<form id="login-form" class="form" novalidate>
+					<div>
+						<label for="username">Ім'я користувача</label>
+						<input type="text" id="username" placeholder="username" required />
+					</div>
+					<div>
+						<label for="password">Пароль</label>
+						<input
+							type="password"
+							id="password"
+							placeholder="••••••"
+							required />
+					</div>
+					<div id="login-error" class="field-error"></div>
+					<button type="submit" class="btn btn-primary">Увійти</button>
+				</form>
+
+				<div id="logged-in-block" style="display: none">
+					<hr class="divider" />
+					<p style="text-align: center; color: var(--muted); font-size: 0.9rem">
+						Ви увійшли як: <strong id="current-user"></strong>
+					</p>
+					<button id="logout-btn" class="btn btn-ghost mt">Вийти</button>
+					<a href="profile.html" class="btn btn-ghost mt"
+						>🔧 Технічний профіль</a
+					>
+				</div>
+
+				<div class="info-note">
+					🍪 При вході через Java Servlet встановлюється cookie
+					<code>user_session</code>. Фронтенд читає його через
+					<code>document.cookie</code>. Сторінка профілю захищена
+					<code>CookieFilter</code>.
+				</div>
+			</div>
+		</div>
+
+		<script type="module">
+			import {initLogin} from "./js/login.js";
+			initLogin();
+		</script>
+	</body>
+</html>

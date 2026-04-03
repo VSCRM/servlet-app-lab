@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="uk">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Dashboard — Hub</title>
+		<link rel="stylesheet" href="css/style.css" />
+	</head>
+	<body>
+		<nav class="nav">
+			<div class="nav__inner">
+				<span class="nav__logo">📋 Notes & Wishboard Hub</span>
+				<ul class="nav__links">
+					<li><a href="index.html" class="active">Dashboard</a></li>
+					<li><a href="login.html">Вхід</a></li>
+					<li><a href="profile.html">Профіль</a></li>
+				</ul>
+				<span id="greeting">Гість</span>
+			</div>
+		</nav>
+
+		<div class="container">
+			<h1 class="page-title">Dashboard</h1>
+
+			<div class="grid-2">
+				<section class="card">
+					<div class="card__title">
+						📝 Нотатки
+						<small>Spring Boot · 9001</small>
+					</div>
+
+					<details>
+						<summary>+ Нова нотатка</summary>
+						<form id="note-form" class="form">
+							<div>
+								<label for="note-title">Заголовок</label>
+								<input
+									type="text"
+									id="note-title"
+									placeholder="Назва нотатки…"
+									required />
+							</div>
+							<div>
+								<label for="note-content">Зміст</label>
+								<textarea
+									id="note-content"
+									placeholder="Текст…"
+									required></textarea>
+							</div>
+							<button type="submit" class="btn btn-primary">Зберегти</button>
+						</form>
+					</details>
+
+					<div id="notes-list"></div>
+				</section>
+
+				<section class="card">
+					<div class="card__title">
+						⭐ Побажання
+						<small>Dropwizard · 9002</small>
+					</div>
+
+					<div class="stats">
+						<div class="stat">
+							<span class="stat__val" id="stat-total">—</span>
+							<span class="stat__lbl">Всього</span>
+						</div>
+						<div class="stat">
+							<span class="stat__val" id="stat-achieved">—</span>
+							<span class="stat__lbl">Виконано</span>
+						</div>
+						<div class="stat">
+							<span class="stat__val" id="stat-pending">—</span>
+							<span class="stat__lbl">Очікує</span>
+						</div>
+					</div>
+
+					<details>
+						<summary>+ Нове бажання</summary>
+						<form id="wish-form" class="form">
+							<div>
+								<label for="wish-name">Назва</label>
+								<input
+									type="text"
+									id="wish-name"
+									placeholder="Що хочете?"
+									required />
+							</div>
+							<div>
+								<label for="wish-desc">Опис (необов'язково)</label>
+								<textarea
+									id="wish-desc"
+									placeholder="Деталі…"
+									style="min-height: 60px"></textarea>
+							</div>
+							<button type="submit" class="btn btn-primary">Додати</button>
+						</form>
+					</details>
+
+					<div id="wishes-list"></div>
+				</section>
+			</div>
+		</div>
+
+		<script type="module">
+			import {initNotes} from "./js/notes.js";
+			import {initWishes} from "./js/wishes.js";
+			import {showGreeting} from "./js/greeting.js";
+
+			showGreeting();
+			initNotes();
+			initWishes();
+		</script>
+	</body>
+</html>
